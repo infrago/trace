@@ -32,12 +32,14 @@ func SpanValues(span Span, instance, flag string) map[string]Any {
 		"time":           span.Time.UnixNano(),
 		"start":          span.Start,
 		"end":            span.End,
-		"cost":           span.Cost,
+		"duration":       span.Duration,
+		"duration_nano":  span.Duration,
 		"trace_id":       span.TraceId,
 		"span_id":        span.SpanId,
 		"parent_span_id": span.ParentSpanId,
 		"step":           span.Name,
 		"kind":           span.Kind,
+		"service_name":   span.ServiceName,
 		"entry":          span.Target,
 		"status":         span.Status,
 		"code":           span.Code,
@@ -57,7 +59,7 @@ func SpanValues(span Span, instance, flag string) map[string]Any {
 		"parentSpanId": span.ParentSpanId,
 		"service":      span.ServiceName,
 		"error":        span.Result,
-		"costMs":       span.Cost / int64(1e6),
+		"durationMs":   span.Duration / int64(1e6),
 		"startMs":      span.Start / int64(1e6),
 		"endMs":        span.End / int64(1e6),
 		"attrs":        attrs,
@@ -83,6 +85,23 @@ func SpanValues(span Span, instance, flag string) map[string]Any {
 		values["step"] = "internal"
 		values["name"] = "internal"
 		values["span"] = "internal"
+	}
+	if values["service_name"] == "" {
+		if v, ok := stringAttr(span.Attributes, "service"); ok && v != "" {
+			values["service_name"] = v
+		}
+	}
+	step := strings.TrimSpace(fmt.Sprintf("%v", values["step"]))
+	kind := strings.TrimSpace(fmt.Sprintf("%v", values["kind"]))
+	switch {
+	case step == "" && kind == "":
+		values["span_name"] = ""
+	case kind == "":
+		values["span_name"] = step
+	case step == "":
+		values["span_name"] = kind
+	default:
+		values["span_name"] = kind + ":" + step
 	}
 	return values
 }

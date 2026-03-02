@@ -493,11 +493,11 @@ func (m *Module) Write(span Span) {
 	if span.End <= 0 {
 		span.End = span.Time.UnixNano()
 	}
-	if span.Cost < 0 {
-		span.Cost = 0
+	if span.Duration < 0 {
+		span.Duration = 0
 	}
-	if span.Cost == 0 && span.End >= span.Start {
-		span.Cost = span.End - span.Start
+	if span.Duration == 0 && span.End >= span.Start {
+		span.Duration = span.End - span.Start
 	}
 	if span.Attributes == nil {
 		span.Attributes = Map{}

@@ -24,7 +24,7 @@ type Span struct {
 	Status       string    `json:"status,omitempty"`
 	Code         int       `json:"code"`
 	Result       string    `json:"result,omitempty"`
-	Cost         int64     `json:"cost"`
+	Duration     int64     `json:"duration"`
 	Start        int64     `json:"start"`
 	End          int64     `json:"end"`
 	Attributes   Map       `json:"attributes,omitempty"`
@@ -130,7 +130,7 @@ func (h *Handle) End(results ...Any) {
 	now := time.Now()
 	h.span.Time = now
 	h.span.End = now.UnixNano()
-	h.span.Cost = time.Since(h.start).Nanoseconds()
+	h.span.Duration = time.Since(h.start).Nanoseconds()
 	okCode := infra.OK.Code()
 	okStatus := strings.ToLower(strings.TrimSpace(infra.OK.Status()))
 	if okStatus == "" {

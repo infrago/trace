@@ -65,7 +65,7 @@ func (inst *Instance) Format(span Span) string {
 
 	message := inst.Config.Format
 	if message == "" {
-		message = "%ts% [%status%] code=%code% kind=%kind% entry=%entry% step=%step% trace=%traceId% span=%spanId% cost=%cost%ns"
+		message = "%ts% [%status%] code=%code% kind=%kind% entry=%entry% step=%step% trace=%traceId% span=%spanId% duration=%duration%ns"
 	}
 	for key, val := range values {
 		message = strings.ReplaceAll(message, "%"+key+"%", fmt.Sprintf("%v", val))
@@ -86,7 +86,8 @@ func defaultOutputFields() map[string]string {
 		"time":           "time",
 		"start":          "start",
 		"end":            "end",
-		"cost":           "cost",
+		"duration":       "duration",
+		"duration_nano":  "duration_nano",
 		"trace_id":       "trace_id",
 		"span_id":        "span_id",
 		"parent_span_id": "parent_span_id",
@@ -116,7 +117,7 @@ func normalizeConfig(cfg Config) Config {
 		cfg.Timeout = 200 * time.Millisecond
 	}
 	if cfg.Format == "" {
-		cfg.Format = "%ts% [%status%] code=%code% kind=%kind% entry=%entry% step=%step% trace=%traceId% span=%spanId% cost=%cost%ns"
+		cfg.Format = "%ts% [%status%] code=%code% kind=%kind% entry=%entry% step=%step% trace=%traceId% span=%spanId% duration=%duration%ns"
 	}
 	if cfg.Sample < 0 {
 		cfg.Sample = 1
