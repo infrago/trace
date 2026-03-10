@@ -13,6 +13,7 @@ import (
 func SpanValues(span Span, instance, flag string) map[string]Any {
 	identity := infra.Identity()
 	project := identity.Project
+	role := identity.Role
 	profile := identity.Profile
 	node := identity.Node
 	if span.Resource != nil {
@@ -21,6 +22,9 @@ func SpanValues(span Span, instance, flag string) map[string]Any {
 		}
 		if v, ok := span.Resource["infra.profile"].(string); ok && v != "" {
 			profile = v
+		}
+		if v, ok := span.Resource["infra.role"].(string); ok && v != "" {
+			role = v
 		}
 		if v, ok := span.Resource["infra.node"].(string); ok && v != "" {
 			node = v
@@ -47,6 +51,7 @@ func SpanValues(span Span, instance, flag string) map[string]Any {
 		"attributes":     attrs,
 		"resource":       span.Resource,
 		"project":        project,
+		"role":           role,
 		"profile":        profile,
 		"node":           node,
 		"flag":           flag,

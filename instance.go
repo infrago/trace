@@ -100,6 +100,7 @@ func defaultOutputFields() map[string]string {
 		"attributes":     "attributes",
 		"resource":       "resource",
 		"project":        "project",
+		"role":           "role",
 		"profile":        "profile",
 		"node":           "node",
 		"flag":           "flag",

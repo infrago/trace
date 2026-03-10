@@ -8,8 +8,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/infrago/infra"
 	. "github.com/infrago/base"
+	"github.com/infrago/infra"
 )
 
 type Span struct {
@@ -70,6 +70,7 @@ func Begin(meta *infra.Meta, name string, attrs ...Map) *Handle {
 	}
 	identity := infra.Identity()
 	span.Resource["infra.project"] = identity.Project
+	span.Resource["infra.role"] = identity.Role
 	span.Resource["infra.profile"] = identity.Profile
 	span.Resource["infra.node"] = identity.Node
 	if len(attrs) > 0 && attrs[0] != nil {
